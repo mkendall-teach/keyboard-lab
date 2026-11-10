@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keyboard & Word Processor Lab</title>
+<style>
+:root { --ink:#192638; --muted:#5b6b7b; --blue:#245bcb; --surface:#fff; --bg:#eef3f9; --key:#ffffff; --border:#cbd6e4; --active:#ffc94c; --activeText:#352600; }
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,'Segoe UI',sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:17px 26px;background:#173969;color:white;flex-wrap:wrap} h1{font-size:23px;line-height:1.2;margin:0} header p{font-size:13px;margin:4px 0 0;color:#c9def7} header .tag{font-weight:700;color:#163a68;background:#e4f1ff;border-radius:20px;padding:7px 12px;font-size:12px}
+main{max-width:1660px;margin:0 auto;padding:19px;display:grid;grid-template-columns:minmax(510px,1.1fr) minmax(430px,1fr);gap:17px;align-items:stretch} .panel{background:var(--surface);border:1px solid #d4e0ed;border-radius:15px;box-shadow:0 5px 18px #18365312;min-width:0;overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:16px 18px 10px}.panel-head h2{margin:0;font-size:19px}.panel-head p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.kbd-outer{padding:9px 13px 16px}.keyboard{background:#dce5f0;border:1px solid #c0cfdf;border-radius:13px;padding:10px;display:flex;flex-direction:column;gap:6px;user-select:none}.keyboard-row{display:flex;gap:5px;width:100%;min-height:51px}.key{min-width:0;flex:1;display:flex;justify-content:center;align-items:center;flex-direction:column;border:1px solid #bbcbdc;border-bottom:3px solid #9faec2;background:var(--key);border-radius:7px;font-size:15px;font-weight:650;position:relative;line-height:1.05;transition:background .065s,transform .065s,border-color .065s}.key small{display:block;font-size:11px;opacity:.76;font-weight:600;margin-bottom:4px}.key.wide{font-size:12px}.key.active{background:var(--active);color:var(--activeText);border-color:#dca015;border-bottom-color:#bf8500;transform:translateY(1px);box-shadow:0 0 0 2px #ffe392}.key.toggle-on{background:#d4e5ff;border-color:#6293e9}.keyboard-caption{padding:12px 2px 2px;display:flex;flex-wrap:wrap;align-items:center;gap:9px;color:var(--muted);font-size:13px}.lit-demo{height:17px;width:24px;background:var(--active);border:1px solid #dca015;border-radius:4px}.status{margin-top:14px;background:#f3f7fe;border:1px solid #d9e4f4;border-radius:10px;padding:13px 15px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.status .label{font-size:13px;color:var(--muted);font-weight:650}.status strong{font-size:20px;background:#fff;border:1px solid #cfdaea;border-radius:6px;min-height:36px;min-width:64px;padding:4px 10px;text-align:center}.status .hint{font-size:13px;color:#51657e}
+.doc-section{display:flex;flex-direction:column;min-height:630px}.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:12px 14px;background:#f5f8fc;border-top:1px solid #e7eef7;border-bottom:1px solid #dae4f0}.toolbar button,.toolbar select,.toolbar input{height:35px;background:white;color:#243852;border:1px solid #b9c9df;border-radius:7px;padding:0 10px;font:inherit;font-size:14px}.toolbar button{min-width:35px;font-weight:700;cursor:pointer}.toolbar button:hover{background:#e7efff}.toolbar button:focus-visible,.toolbar select:focus-visible{outline:3px solid #ffcc56;outline-offset:1px}.toolbar .format-button[aria-pressed="true"]{background:#d6e6ff;border-color:#427cda}.toolbar .sep{width:1px;height:26px;background:#ccdaea;margin:0 2px}.toolbar label{font-size:12px;color:#56677b}.toolbar select{max-width:118px}.doc-wrap{background:#e7edf5;padding:20px 19px;flex:1}.paper{background:white;min-height:450px;max-width:950px;margin:0 auto;border:1px solid #cfdae6;box-shadow:0 3px 9px #17376312;border-radius:3px;padding:38px 36px;outline:none;font-size:19px;line-height:1.6;overflow-wrap:anywhere}.paper:focus{box-shadow:0 0 0 3px #9fc1fa,0 3px 9px #17376312}.paper:empty::before{content:attr(data-placeholder);color:#8290a0;pointer-events:none}.foot{padding:10px 16px;background:white;border-top:1px solid #e7edf3;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;color:#617387;font-size:12px}.footer-note{max-width:1660px;margin:0 auto 25px;padding:0 20px;color:#56687b;font-size:13px}.notice{margin:0 18px 17px;border:1px solid #f0d899;background:#fff9e9;padding:10px 13px;border-radius:8px;color:#604b21;font-size:13px}.small-btn{background:#e7f0ff;border:1px solid #9bbbe6;color:#204b91;cursor:pointer;border-radius:7px;padding:7px 10px;font-weight:700;font-size:12px}.small-btn:hover{background:#d6e8ff}.micro{font-size:12px;color:#617387}.spell-help{margin:0;padding:10px 16px;background:#f0f6ff;border-top:1px solid #d8e5f7;font-size:13px;color:#28476a}.toolbar #spellToggle[aria-pressed="true"]{background:#d9f5e5;border-color:#5ba77d}.toolbar #spellToggle[aria-pressed="false"]{background:#fff1e4;border-color:#d7a77e}
+@media (max-width:1050px){main{grid-template-columns:1fr}.doc-section{min-height:520px}.keyboard-row{min-height:47px}}@media (max-width:650px){main{padding:9px;gap:10px}.kbd-outer{padding:5px 6px 12px}.keyboard{padding:5px;gap:3px}.keyboard-row{gap:2px;min-height:36px}.key{font-size:10px;border-radius:4px}.key.wide{font-size:8px}.key small{font-size:8px;margin-bottom:2px}.paper{padding:20px;min-height:300px}.doc-wrap{padding:10px}header{padding:14px}}
+@media print{header,.keyboard,.toolbar,.panel:first-child,.footer-note,.foot,.panel-head,.notice{display:none!important}main{display:block;padding:0}.panel{border:none;box-shadow:none}.doc-wrap{background:white;padding:0}.paper{box-shadow:none;border:none;outline:none;padding:0;min-height:0}}
+</style>
+</head>
+<body>
+<header><div><h1>⌨️ Keyboard & Word Processor Lab</h1><p>Watch the keys. Write the words. Discover how a word processor works.</p></div><span class="tag">CLASSROOM DEMO • OFFLINE READY</span></header>
+<main>
+<section class="panel" aria-label="Live keyboard"><div class="panel-head"><div><h2>1. Watch the keyboard</h2><p>Every key you press lights up in yellow.</p></div><button class="small-btn" id="focusEditor">Type in document →</button></div><div class="kbd-outer"><div class="keyboard" id="keyboard" aria-label="Keyboard visualization"></div><div class="keyboard-caption"><span class="lit-demo"></span><span>Yellow = key being pressed</span><span>•</span><span>Blue = Caps Lock is on</span></div><div class="status" aria-live="polite"><span class="label">LAST KEY:</span><strong id="lastKey">—</strong><span class="hint" id="combo">Click the document and start typing!</span></div></div><div class="notice"><strong>Teacher tip:</strong> Keep your cursor in the document on the right. The keyboard stays visible and highlights the keys you press, including Shift, Tab, Enter, Backspace and shortcuts.</div></section>
+<section class="panel doc-section" aria-label="Word processor"><div class="panel-head"><div><h2>2. Write your document</h2><p>A simple word processor to practice typing and formatting.</p></div><button class="small-btn" id="newDoc">New document</button></div><div class="toolbar" role="toolbar" aria-label="Formatting tools"><button class="format-button" data-command="bold" title="Bold (Ctrl+B)" aria-label="Bold" aria-pressed="false">B</button><button class="format-button" data-command="italic" title="Italic (Ctrl+I)" aria-label="Italic" aria-pressed="false"><em>I</em></button><button class="format-button" data-command="underline" title="Underline (Ctrl+U)" aria-label="Underline" aria-pressed="false"><u>U</u></button><span class="sep"></span><label for="fontSize">Text size</label><select id="fontSize" aria-label="Font size"><option value="3">Normal</option><option value="2">Small</option><option value="4">Large</option><option value="5">Extra large</option></select><span class="sep"></span><button data-command="justifyLeft" title="Align left" aria-label="Align left">☰</button><button data-command="justifyCenter" title="Center" aria-label="Center">≡</button><button data-command="justifyRight" title="Align right" aria-label="Align right">☷</button><span class="sep"></span><button data-command="insertUnorderedList" title="Bulleted list" aria-label="Bulleted list">• ≡</button><button data-command="undo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button><button data-command="redo" title="Redo (Ctrl+Y)" aria-label="Redo">↷</button><button id="spellToggle" type="button" aria-pressed="true" title="Turn browser spelling check on or off">Spelling: ON</button><button id="spellExample" type="button" title="Insert a sample sentence with misspellings">Try spelling</button><button id="printDoc" title="Print document" aria-label="Print document">Print</button></div><div class="doc-wrap"><div id="editor" class="paper" contenteditable="true" spellcheck="true" role="textbox" aria-label="Editable document" aria-multiline="true" data-placeholder="Start typing here..."></div></div><p class="spell-help" id="spellHelp">🔎 <strong>Spelling check is ON.</strong> Type a misspelled word and press Space. If your browser has spelling enabled, a red underline should appear. Right-click the word to see suggested corrections. Grammar suggestions depend on your browser and school settings.</p><div class="foot"><span id="wordCount">0 words • 0 characters</span><span>Tip: try <strong>Ctrl + B</strong>, then type!</span></div></section>
+</main>
+<p class="footer-note">Works in Chrome or Edge with no installation, login, internet, or add-ons. Native spelling suggestions require spelling check to be enabled in your browser and permitted by school policy. Keyboard layout is a standard English Windows-style keyboard; key positions may differ slightly on your laptop. Text stays in this browser page until you clear or close it. Use Print to save a PDF or paper copy.</p>
+<script>
+(()=>{'use strict';
+const specs=[
+[{c:'Backquote',a:'`',b:'~'},...'1234567890'.split('').map((a,i)=>({c:'Digit'+a,a,b:')!@#$%^&*('[i]})),{c:'Minus',a:'-',b:'_'},{c:'Equal',a:'=',b:'+'},{c:'Backspace',a:'Backspace',w:2.05}],
+[{c:'Tab',a:'Tab',w:1.55},...'QWERTYUIOP'.split('').map(a=>({c:'Key'+a,a})),{c:'BracketLeft',a:'[',b:'{'},{c:'BracketRight',a:']',b:'}'},{c:'Backslash',a:'\\',b:'|',w:1.55}],
+[{c:'CapsLock',a:'Caps Lock',w:1.85},...'ASDFGHJKL'.split('').map(a=>({c:'Key'+a,a})),{c:'Semicolon',a:';',b:':'},{c:'Quote',a:"'",b:'"'},{c:'Enter',a:'Enter',w:2.15}],
+[{c:'ShiftLeft',a:'Shift',w:2.4},...'ZXCVBNM'.split('').map(a=>({c:'Key'+a,a})),{c:'Comma',a:',',b:'<'},{c:'Period',a:'.',b:'>'},{c:'Slash',a:'/',b:'?'},{c:'ShiftRight',a:'Shift',w:2.75}],
+[{c:'ControlLeft',a:'Ctrl',w:1.5},{c:'MetaLeft',a:'Win',w:1.25},{c:'AltLeft',a:'Alt',w:1.3},{c:'Space',a:'Space',w:6.6},{c:'AltRight',a:'Alt',w:1.3},{c:'ControlRight',a:'Ctrl',w:1.5},{c:'ArrowLeft',a:'←'},{c:'ArrowDown',a:'↓'},{c:'ArrowRight',a:'→'}]
+];
+const keyboard=document.getElementById('keyboard'),keys=new Map(),editor=document.getElementById('editor'),last=document.getElementById('lastKey'),combo=document.getElementById('combo');
+for(const r of specs){const row=document.createElement('div');row.className='keyboard-row';for(const k of r){const el=document.createElement('div');el.className='key'+(k.a.length>2?' wide':'');el.style.flexGrow=k.w||1;el.style.flexBasis='0';if(k.b){const upper=document.createElement('small');upper.textContent=k.b;el.append(upper)}const label=document.createElement('span');label.textContent=k.a;el.append(label);el.dataset.code=k.c;row.append(el);keys.set(k.c,el)}keyboard.append(row)}
+let caps=false,flashTimers=new Map();const modifierCodes={Shift:'ShiftLeft',Control:'ControlLeft',Alt:'AltLeft',Meta:'MetaLeft'};
+function elFor(e){return keys.get(e.code)||keys.get(modifierCodes[e.key])}
+function readable(e){const names={Backspace:'Backspace',Enter:'Enter',Escape:'Esc',Delete:'Delete',Control:'Ctrl',Meta:'Windows',Alt:'Alt',Shift:'Shift',CapsLock:'Caps Lock',ArrowLeft:'←',ArrowRight:'→',ArrowUp:'↑',ArrowDown:'↓',Tab:'Tab',' ':'Space'};return names[e.key]||e.key}
+function mark(e){const node=elFor(e);if(node){node.classList.add('active');clearTimeout(flashTimers.get(node));flashTimers.set(node,setTimeout(()=>node.classList.remove('active'),320))}last.textContent=readable(e);const parts=[];if(e.ctrlKey&&e.key!=='Control')parts.push('Ctrl');if(e.shiftKey&&e.key!=='Shift')parts.push('Shift');if(e.altKey&&e.key!=='Alt')parts.push('Alt');if(e.metaKey&&e.key!=='Meta')parts.push('Windows');parts.push(readable(e));combo.textContent=parts.join(' + ');if(e.key==='CapsLock'){caps=e.getModifierState?e.getModifierState('CapsLock'):!caps;const cl=keys.get('CapsLock');if(cl)cl.classList.toggle('toggle-on',caps)}}
+window.addEventListener('keydown',mark,true);window.addEventListener('keyup',e=>{const node=elFor(e);if(node&&!['CapsLock'].includes(e.key)){clearTimeout(flashTimers.get(node));flashTimers.set(node,setTimeout(()=>node.classList.remove('active'),170))}},true);window.addEventListener('blur',()=>keys.forEach(k=>k.classList.remove('active')));
+function count(){const text=editor.innerText||'';const words=(text.trim().match(/\S+/g)||[]).length;document.getElementById('wordCount').textContent=`${words} word${words===1?'':'s'} • ${text.length} character${text.length===1?'':'s'}`}
+// In the document, Tab inserts a visible four-space indent instead of
+// moving keyboard focus to the next control. Elsewhere, Tab navigates normally.
+editor.addEventListener('keydown',e=>{
+  if(e.key !== 'Tab' || e.ctrlKey || e.altKey || e.metaKey) return;
+  e.preventDefault();
+  // Use nonbreaking spaces so an indent remains visible at the beginning of a line.
+  // execCommand preserves the browser's normal undo history for classroom demos.
+  const indent = '\u00a0'.repeat(4);
+  if(!document.execCommand('insertText',false,indent)){
+    const selection=window.getSelection();
+    if(selection && selection.rangeCount){
+      const range=selection.getRangeAt(0);
+      range.deleteContents();
+      const node=document.createTextNode(indent);
+      range.insertNode(node);
+      range.setStartAfter(node);range.collapse(true);
+      selection.removeAllRanges();selection.addRange(range);
+    }
+  }
+  count();
+});
+editor.addEventListener('input',count);function focusEnd(){editor.focus();const selection=window.getSelection();if(!selection.rangeCount||!editor.contains(selection.anchorNode)){const range=document.createRange();range.selectNodeContents(editor);range.collapse(false);selection.removeAllRanges();selection.addRange(range)}}
+document.getElementById('focusEditor').addEventListener('click',focusEnd);
+const spellToggle=document.getElementById('spellToggle'),spellHelp=document.getElementById('spellHelp');
+spellToggle.addEventListener('click',()=>{
+  const enabled=editor.spellcheck===false;
+  editor.spellcheck=enabled;
+  spellToggle.textContent='Spelling: '+(enabled?'ON':'OFF');
+  spellToggle.setAttribute('aria-pressed',String(enabled));
+  spellHelp.innerHTML=enabled
+    ? '🔎 <strong>Spelling check is ON.</strong> Type a misspelled word and press Space. If your browser has spelling enabled, a red underline should appear. Right-click the word to see suggested corrections. Grammar suggestions depend on your browser and school settings.'
+    : '🔎 <strong>Spelling check is OFF.</strong> Turn it on to demonstrate red underlines and suggested corrections. Browser settings may affect what appears.';
+  editor.focus();
+});
+document.getElementById('spellExample').addEventListener('click',()=>{
+  focusEnd();
+  // Insert plain text using the browser editor so the built-in spellchecker can check it.
+  const sample='I hav a beautifull dog. She likes to play in the gardin. ';
+  if(!document.execCommand('insertText',false,sample)){
+    const selection=window.getSelection();
+    if(selection&&selection.rangeCount){const range=selection.getRangeAt(0);range.deleteContents();const node=document.createTextNode(sample);range.insertNode(node);range.setStartAfter(node);range.collapse(true);selection.removeAllRanges();selection.addRange(range)}
+  }
+  count();
+});
+function command(name,value){editor.focus();document.execCommand(name,false,value);count();syncFormatting()}
+// Prevent toolbar focus from collapsing the current text selection.
+document.querySelectorAll('.toolbar button[data-command]').forEach(b=>{b.addEventListener('mousedown',e=>e.preventDefault());b.addEventListener('click',()=>command(b.dataset.command,null))});
+document.getElementById('fontSize').addEventListener('change',e=>command('fontSize',e.target.value));
+function syncFormatting(){for(const b of document.querySelectorAll('.format-button')){let on=false;try{on=document.queryCommandState(b.dataset.command)}catch(_){}b.setAttribute('aria-pressed',String(on))}}
+document.addEventListener('selectionchange',()=>{if(document.activeElement===editor)syncFormatting()});editor.addEventListener('keyup',syncFormatting);editor.addEventListener('mouseup',syncFormatting);
+document.getElementById('newDoc').addEventListener('click',()=>{if((editor.innerText||'').trim()&&!confirm('Clear your document and start a new one?'))return;editor.innerHTML='';count();focusEnd()});document.getElementById('printDoc').addEventListener('click',()=>window.print());
+count();
+})();
+</script>
+</body>
+</html>
